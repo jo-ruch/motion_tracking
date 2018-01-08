@@ -3,37 +3,18 @@
 #include<opencv2/imgproc/imgproc.hpp>
 #include<iostream>
 #include<fstream>
+#include "Graph.h"
 
-#define WIDTH 640
-#define HEIGHT 480
-#define DIAMETER 70                        // millimeters diameter round object
-#define ANGLE 60
+#include "main.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main() {
 
-    FILE *gp;
-    gp = popen("gnuplot", "w");
-    if (!gp) {
-        std::cout << "Cannot open gnuplot" << std::endl;
-    }
-    fprintf(gp, ""
-            "set parametric\n"
-            "set urange [0:pi]\n"
-            "set vrange [0:2*pi]\n"
-            "set xyplane 0\n"
-//            "set view equal xyz\n"
-            "set pm3d hidden3d 100 depthorder\n"
-            "unset key \n"
-            "set samples 24\n"
-            "set isosamples 36\n"
-            "set title 'Tracking' font \"Arial,20\" \n"
-            "set xrange [-300:300]\n"
-            "set yrange [0:800]\n"
-            "set zrange [-300:300]\n"
-            "");
-    fflush(gp);
+    Graph p1;
+    if(!p1.init()) {
+        p1.setup();
+    };
 
     cv::VideoCapture capWebcam(0);        // declare a VideoCapture object and associate to webcam, 0 => use 1st webcam
 
@@ -123,15 +104,7 @@ int main() {
             // Calculate dimensions
             distance = 0.5 * DIAMETER * WIDTH / (tan(0.5 * ANGLE * (3.1416 / 180)) * (radius * 2));
 
-            // Render 3d view
-            fprintf(gp, ""
-                            "r1 = %d\n"
-                            "x1 = %f\n"
-                            "y1 = %f\n"
-                            "z1 = %f\n"
-                            "splot x1+r1*cos(v)*cos(u), y1+r1*cos(v)*sin(u), z1+r1*sin(v) w pm3d\n",
-                    DIAMETER, xpos, distance, ypos);
-            fflush(gp);
+            p1.plot(xpos, ypos, distance);
 
             // Print info over image
             std::sprintf(str, "x pos: %.2f", xpos);
@@ -157,7 +130,7 @@ int main() {
         charCheckForEscKey = (char) (cv::waitKey(1));
     }
 
-    pclose(gp);
+    p1.close();
 
     return (0);
 }

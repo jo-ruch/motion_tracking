@@ -4,7 +4,7 @@ project(motion_tracking)
 
 find_package(OpenCV REQUIRED)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp main.h Graph.cpp Graph.h )
 
 add_executable(motion_tracking ${SOURCE_FILES})
 
