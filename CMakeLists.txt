@@ -4,7 +4,7 @@ project(motion_tracking)
 
 find_package(OpenCV REQUIRED)
 
-set(SOURCE_FILES main.cpp main.h Graph.cpp Graph.h )
+set(SOURCE_FILES main.cpp main.h lib/graph/Graph.cpp lib/graph/Graph.h lib/filter/Filter.cpp lib/filter/Filter.h)
 
 add_executable(motion_tracking ${SOURCE_FILES})
 

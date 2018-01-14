@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <iostream>
 
-#include "main.h"
+#include "../../main.h"
 
 class Graph {
 public:
